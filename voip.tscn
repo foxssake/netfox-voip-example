@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://cniivvw5kuolr"]
+
+[ext_resource type="Script" path="res://scripts/player-spawner.gd" id="1_5pitt"]
+[ext_resource type="PackedScene" uid="uid://badtpsxn5lago" path="res://ui/network-popup.tscn" id="1_toles"]
+[ext_resource type="PackedScene" uid="uid://c4mfd18gpg6gx" path="res://characters/player.tscn" id="2_wdief"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fdeph"]
+
+[sub_resource type="Sky" id="Sky_1tr2y"]
+sky_material = SubResource("ProceduralSkyMaterial_fdeph")
+
+[sub_resource type="Environment" id="Environment_8l7lf"]
+background_mode = 2
+sky = SubResource("Sky_1tr2y")
+ssao_enabled = true
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_0l5kt"]
+
+[node name="VoIP Example" type="Node3D"]
+
+[node name="Map" type="Node" parent="."]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Map"]
+use_collision = true
+collision_layer = 3
+
+[node name="CSGFloor" type="CSGBox3D" parent="Map/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+size = Vector3(64, 0.5, 64)
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.5, 0.612372, -0.612372, 0, 0.707107, 0.707107, 0.866025, -0.353553, 0.353553, -6.7361, 8.77817, 3.88909)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 14.3564, 8.86602)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_8l7lf")
+
+[node name="Network" type="Node" parent="."]
+
+[node name="Players" type="Node" parent="Network"]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="Network"]
+spawn_path = NodePath("../Players")
+script = ExtResource("1_5pitt")
+player_scene = ExtResource("2_wdief")
+
+[node name="Network Popup" parent="." instance=ExtResource("1_toles")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamMicrophone_0l5kt")
+bus = &"Record"

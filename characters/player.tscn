@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://c4mfd18gpg6gx"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_erody"]
+[ext_resource type="Script" path="res://scripts/voice-source.gd" id="2_gm1a7"]
+[ext_resource type="Script" path="res://scripts/voip-sink.gd" id="2_wvynp"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vny35"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_05v6p"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xr5r2"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Player" type="CharacterBody3D"]
+collision_mask = 2
+script = ExtResource("1_erody")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_vny35")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_05v6p")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_xr5r2")
+
+[node name="VoiceSource" type="Node" parent="."]
+script = ExtResource("2_gm1a7")
+
+[node name="VoipSink" type="Node" parent="." node_paths=PackedStringArray("voice_player")]
+script = ExtResource("2_wvynp")
+compression_mode = -1
+voice_player = NodePath("../AudioStreamPlayer3D")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+
+[connection signal="on_data" from="VoiceSource" to="VoipSink" method="push_voice"]
