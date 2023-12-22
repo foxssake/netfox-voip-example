@@ -106,6 +106,15 @@ If you want to use VoIP in your own project, it is not necessary.
 
 However, the example itself uses netfox, hence the project name.
 
+### Why only AudioStreamPlayer3D?
+
+For the example, the goal was to have 3D playback.
+
+Due to Godot's class layout, AudioStreamPlayer3D, AudioStreamPlayer2D and
+AudioStreamPlayer don't have a shared parent class that plays back sound.
+
+So if you need non-3D playback, you'll need to update `VoiceSink`.
+
 ### Will it support X?
 
 New features are currently not planned. However, PR's are always welcome!
