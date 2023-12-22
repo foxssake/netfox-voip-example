@@ -10,9 +10,9 @@ config_version=5
 
 [application]
 
-config/name="godot-voip-example"
+config/name="netfox VoIP example"
 config/description="An experimental sample project for VoIP in Godot"
-config/version="0.1.0"
+config/version="1.0.0"
 run/main_scene="res://voip.tscn"
 config/features=PackedStringArray("4.2")
 run/max_fps=240
